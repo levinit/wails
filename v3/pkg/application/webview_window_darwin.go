@@ -537,13 +537,13 @@ void windowGetRelativePosition(void* nsWindow, int* x, int* y) {
 }
 
 // Get absolute window position
-void windowGetAbsolutePosition(void* nsWindow, int* x, int* y) {
+void windowGetPosition(void* nsWindow, int* x, int* y) {
 	NSRect frame = [(WebviewWindow*)nsWindow frame];
 	*x = frame.origin.x;
 	*y = frame.origin.y;
 }
 
-void windowSetAbsolutePosition(void* nsWindow, int x, int y) {
+void windowSetPosition(void* nsWindow, int x, int y) {
 	NSRect frame = [(WebviewWindow*)nsWindow frame];
 	frame.origin.x = x;
 	frame.origin.y = y;
@@ -803,8 +803,8 @@ func (w *macosWebviewWindow) isFocused() bool {
 	return bool(C.windowIsFocused(w.nsWindow))
 }
 
-func (w *macosWebviewWindow) setAbsolutePosition(x int, y int) {
-	C.windowSetAbsolutePosition(w.nsWindow, C.int(x), C.int(y))
+func (w *macosWebviewWindow) setPosition(x int, y int) {
+	C.windowSetPosition(w.nsWindow, C.int(x), C.int(y))
 }
 
 func (w *macosWebviewWindow) print() error {
@@ -1274,10 +1274,10 @@ func (w *macosWebviewWindow) relativePosition() (int, int) {
 	return int(x), int(y)
 }
 
-func (w *macosWebviewWindow) absolutePosition() (int, int) {
+func (w *macosWebviewWindow) position() (int, int) {
 	var x, y C.int
 	InvokeSync(func() {
-		C.windowGetAbsolutePosition(w.nsWindow, &x, &y)
+		C.windowGetPosition(w.nsWindow, &x, &y)
 	})
 
 	return int(x), int(y)
